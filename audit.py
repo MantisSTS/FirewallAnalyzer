@@ -1292,7 +1292,6 @@ def extract_firewall_name_from_csv_filename(filename):
     """
     Extract firewall name from CSV filename (fallback for CSV files).
     Examples: 
-    - "glo-fw-31802-01-1.csv" -> "glo-fw-31802-01-1"
     - "Azure UK South Firewall Config.csv" -> "Azure UK South Firewall"
     """
     basename = os.path.basename(filename)
@@ -1313,7 +1312,6 @@ def extract_firewall_name(filename):
     """
     Extract firewall name from filename.
     Examples: 
-    - "glo-fw-31802-01-1.txt" -> "glo-fw-31802-01-1"
     - "Azure UK South Firewall Config.txt" -> "Azure UK South Firewall"
     - "fw-config.txt" -> "fw-config"
     """
