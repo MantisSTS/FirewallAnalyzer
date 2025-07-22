@@ -1039,6 +1039,255 @@ CHECKS = [
         "context_required": True,
         "context_check": r"config\s+system\s+snmp",
         "exclude_patterns": [r"#.*set\s+description"]
+    },
+    
+    # Wireless Security Configuration
+    {
+        "name": "Wireless WEP Encryption",
+        "pattern": r"set\s+security\s+wep|set\s+encrypt\s+wep",
+        "description": "WEP encryption is deprecated and easily broken.",
+        "cvss": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
+        "score": 8.8,
+        "context_required": True,
+        "context_check": r"config\s+wireless-controller",
+        "exclude_patterns": [r"#.*set\s+security", r"#.*set\s+encrypt"]
+    },
+    {
+        "name": "Wireless Open Authentication",
+        "pattern": r"set\s+security\s+open|set\s+auth\s+open",
+        "description": "Wireless network configured with open (no) authentication.",
+        "cvss": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
+        "score": 8.8,
+        "context_required": True,
+        "context_check": r"config\s+wireless-controller",
+        "exclude_patterns": [r"#.*set\s+security", r"#.*set\s+auth"]
+    },
+    {
+        "name": "Wireless WPS Enabled",
+        "pattern": r"set\s+wps\s+enable|set\s+wps-status\s+enable",
+        "description": "WPS (WiFi Protected Setup) is enabled and vulnerable to attacks.",
+        "cvss": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
+        "score": 8.8,
+        "context_required": True,
+        "context_check": r"config\s+wireless-controller",
+        "exclude_patterns": [r"#.*set\s+wps", r"#.*set\s+wps-status"]
+    },
+    {
+        "name": "Wireless Hidden SSID Disabled",
+        "pattern": r"set\s+broadcast-ssid\s+enable|unset\s+hidden-ssid",
+        "description": "SSID broadcasting is enabled, revealing wireless network presence.",
+        "cvss": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:L/I:N/A:N",
+        "score": 3.7,
+        "context_required": True,
+        "context_check": r"config\s+wireless-controller",
+        "exclude_patterns": [r"#.*set\s+broadcast-ssid", r"#.*unset\s+hidden-ssid"]
+    },
+    
+    # Weak Password Policy Checks
+    {
+        "name": "Device Allows Weak Passwords",
+        "pattern": r"set\s+password\s+(password|admin|123456|12345678|qwerty|abc123|test|user|guest)|set\s+min-password-length\s+[1-7](\s|$)",
+        "description": "Device is configured with weak or default passwords.",
+        "cvss": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "score": 9.8,
+        "context_required": False,
+        "exclude_patterns": [r"#.*set\s+password", r"#.*set\s+min-password-length"]
+    },
+    {
+        "name": "Password Dictionary Check Disabled",
+        "pattern": r"set\s+password-policy\s+.*dictionary\s+disable|unset\s+password-dictionary",
+        "description": "Password dictionary checking is disabled, allowing common passwords.",
+        "cvss": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:L/A:N",
+        "score": 5.4,
+        "context_required": False,
+        "exclude_patterns": [r"#.*set\s+password-policy", r"#.*unset\s+password-dictionary"]
+    },
+    
+    # Logging Security Checks
+    {
+        "name": "Logging Not Enabled",
+        "pattern": r"set\s+status\s+disable|unset\s+status",
+        "description": "System logging is disabled, reducing audit capability.",
+        "cvss": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:L",
+        "score": 5.8,
+        "context_required": True,
+        "context_check": r"config\s+log",
+        "exclude_patterns": [r"#.*set\s+status", r"#.*unset\s+status"]
+    },
+    {
+        "name": "FortiLog Not Enabled",
+        "pattern": r"set\s+fortilog\s+disable|unset\s+fortilog",
+        "description": "FortiGate logging service is not enabled.",
+        "cvss": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:L",
+        "score": 5.8,
+        "context_required": True,
+        "context_check": r"config\s+log",
+        "exclude_patterns": [r"#.*set\s+fortilog", r"#.*unset\s+fortilog"]
+    },
+    {
+        "name": "Event Logging Disabled",
+        "pattern": r"set\s+eventlog\s+disable|set\s+log-event\s+disable",
+        "description": "System event logging is disabled.",
+        "cvss": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:L",
+        "score": 5.8,
+        "context_required": False,
+        "exclude_patterns": [r"#.*set\s+eventlog", r"#.*set\s+log-event"]
+    },
+    
+    # Layer 7 Content Security
+    {
+        "name": "Layer 7 Content Blocking Disabled",
+        "pattern": r"set\s+inspection-mode\s+proxy\s+disable|set\s+utm-status\s+disable|unset\s+av-profile",
+        "description": "Layer 7 content inspection and blocking is disabled.",
+        "cvss": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L",
+        "score": 5.8,
+        "context_required": True,
+        "context_check": r"config\s+firewall\s+policy",
+        "exclude_patterns": [r"#.*set\s+inspection-mode", r"#.*set\s+utm-status", r"#.*unset\s+av-profile"]
+    },
+    {
+        "name": "Web Filter Not Applied",
+        "pattern": r"unset\s+webfilter-profile|set\s+webfilter-profile\s+\"\"",
+        "description": "Web filtering profile is not applied to firewall policy.",
+        "cvss": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N",
+        "score": 5.1,
+        "context_required": True,
+        "context_check": r"config\s+firewall\s+policy",
+        "exclude_patterns": [r"#.*unset\s+webfilter-profile", r"#.*set\s+webfilter-profile"]
+    },
+    {
+        "name": "Application Control Disabled",
+        "pattern": r"unset\s+application-list|set\s+application-list\s+\"\"",
+        "description": "Application control profile is not applied to firewall policy.",
+        "cvss": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:N",
+        "score": 5.1,
+        "context_required": True,
+        "context_check": r"config\s+firewall\s+policy",
+        "exclude_patterns": [r"#.*unset\s+application-list", r"#.*set\s+application-list"]
+    },
+    
+    # Intrusion Detection System Checks
+    {
+        "name": "IPS Profile Not Applied",
+        "pattern": r"unset\s+ips-sensor|set\s+ips-sensor\s+\"\"",
+        "description": "Intrusion Prevention System profile is not applied.",
+        "cvss": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:L",
+        "score": 7.1,
+        "context_required": True,
+        "context_check": r"config\s+firewall\s+policy",
+        "exclude_patterns": [r"#.*unset\s+ips-sensor", r"#.*set\s+ips-sensor"]
+    },
+    {
+        "name": "Intrusion Detection Disabled",
+        "pattern": r"set\s+ips\s+disable|set\s+intrusion-detection\s+disable",
+        "description": "Intrusion detection system is disabled.",
+        "cvss": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:L",
+        "score": 7.1,
+        "context_required": False,
+        "exclude_patterns": [r"#.*set\s+ips", r"#.*set\s+intrusion-detection"]
+    },
+    {
+        "name": "IPS Bypass Mode Enabled",
+        "pattern": r"set\s+ips-mode\s+bypass|set\s+fail-open\s+enable",
+        "description": "IPS configured in bypass mode, reducing protection.",
+        "cvss": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L",
+        "score": 5.8,
+        "context_required": True,
+        "context_check": r"config\s+ips",
+        "exclude_patterns": [r"#.*set\s+ips-mode", r"#.*set\s+fail-open"]
+    },
+    
+    # Operating System Security
+    {
+        "name": "Outdated Operating System",
+        "pattern": r"set\s+image\s+.*v[1-4]\.|set\s+firmware\s+.*v[1-4]\.|#Configuration file for FortiOS.*v[1-4]\.",
+        "description": "Device is running an outdated operating system version.",
+        "cvss": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "score": 9.8,
+        "context_required": False,
+        "exclude_patterns": [r"#.*set\s+image", r"#.*set\s+firmware"]
+    },
+    {
+        "name": "Firmware Auto-Update Disabled",
+        "pattern": r"set\s+firmware-upgrade\s+disable|set\s+auto-update\s+disable",
+        "description": "Automatic firmware updates are disabled.",
+        "cvss": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:N/I:L/A:L",
+        "score": 4.9,
+        "context_required": False,
+        "exclude_patterns": [r"#.*set\s+firmware-upgrade", r"#.*set\s+auto-update"]
+    },
+    {
+        "name": "Security Updates Disabled",
+        "pattern": r"set\s+av-update\s+disable|set\s+signature-update\s+disable|set\s+forticare\s+disable",
+        "description": "Security signature updates are disabled.",
+        "cvss": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:L/A:L",
+        "score": 5.8,
+        "context_required": False,
+        "exclude_patterns": [r"#.*set\s+av-update", r"#.*set\s+signature-update", r"#.*set\s+forticare"]
+    },
+    
+    # Account Security Checks
+    {
+        "name": "Admin Account Name Contains Admin",
+        "pattern": r"edit\s+\".*admin.*\"|edit\s+admin(\s|$)",
+        "description": "Administrator account uses predictable 'admin' in username.",
+        "cvss": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:L/A:N",
+        "score": 6.1,
+        "context_required": True,
+        "context_check": r"config\s+system\s+admin",
+        "exclude_patterns": [r"#.*edit"]
+    },
+    {
+        "name": "Default Service Account Active",
+        "pattern": r"edit\s+(guest|test|demo|user|service|operator)",
+        "description": "Default or service accounts are active and should be disabled.",
+        "cvss": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "score": 9.8,
+        "context_required": True,
+        "context_check": r"config\s+system\s+admin",
+        "exclude_patterns": [r"#.*edit"]
+    },
+    {
+        "name": "Account Without MFA",
+        "pattern": r"edit\s+.*\n(?:(?!set\s+two-factor).*\n)*(?:(?!set\s+fortitoken).*\n)*",
+        "description": "Administrative account configured without multi-factor authentication.",
+        "cvss": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+        "score": 8.8,
+        "context_required": True,
+        "context_check": r"config\s+system\s+admin",
+        "exclude_patterns": [r"#.*edit"]
+    },
+    
+    # IKE/VPN Weak Hash Algorithms
+    {
+        "name": "IKE Weak Hash Algorithms",
+        "pattern": r"set\s+hash\s+(md5|sha1)(\s|$)|set\s+ike-hash\s+(md5|sha1)(\s|$)",
+        "description": "IKE configured with weak hash algorithms (MD5/SHA1).",
+        "cvss": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:N",
+        "score": 7.4,
+        "context_required": True,
+        "context_check": r"config\s+vpn\s+ipsec",
+        "exclude_patterns": [r"#.*set\s+hash", r"#.*set\s+ike-hash"]
+    },
+    {
+        "name": "IPSec Weak Authentication",
+        "pattern": r"set\s+authmethod\s+psk.*\n(?:(?!set\s+psksecret.*[A-Za-z0-9]{16,}).*\n)*",
+        "description": "IPSec VPN using weak pre-shared key authentication.",
+        "cvss": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N",
+        "score": 8.1,
+        "context_required": True,
+        "context_check": r"config\s+vpn\s+ipsec",
+        "exclude_patterns": [r"#.*set\s+authmethod"]
+    },
+    {
+        "name": "VPN Weak Encryption Algorithms",
+        "pattern": r"set\s+encryption\s+(des|3des|rc4)(\s|$)|set\s+proposal\s+.*(?:des|3des|rc4)",
+        "description": "VPN configured with weak encryption algorithms.",
+        "cvss": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N",
+        "score": 7.5,
+        "context_required": True,
+        "context_check": r"config\s+vpn\s+ipsec",
+        "exclude_patterns": [r"#.*set\s+encryption", r"#.*set\s+proposal"]
     }
 ]
 
@@ -1292,6 +1541,7 @@ def extract_firewall_name_from_csv_filename(filename):
     """
     Extract firewall name from CSV filename (fallback for CSV files).
     Examples: 
+    - "glo-fw-31802-01-1.csv" -> "glo-fw-31802-01-1"
     - "Azure UK South Firewall Config.csv" -> "Azure UK South Firewall"
     """
     basename = os.path.basename(filename)
@@ -1312,6 +1562,7 @@ def extract_firewall_name(filename):
     """
     Extract firewall name from filename.
     Examples: 
+    - "glo-fw-31802-01-1.txt" -> "glo-fw-31802-01-1"
     - "Azure UK South Firewall Config.txt" -> "Azure UK South Firewall"
     - "fw-config.txt" -> "fw-config"
     """
