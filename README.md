@@ -4,7 +4,7 @@ A Python tool for auditing firewall configurations and identifying security vuln
 
 ## ✨ Features
 
-- **78+ Security Checks** - Vulnerability detection across multiple categories
+- **120+ Security Checks** - Comprehensive vulnerability detection across multiple categories
 - **CVSS 3.1 Scoring** - Industry-standard risk assessment for each finding
 - **Multiple Input Formats** - Supports text config files and CSV policy exports
 - **Rich HTML Reports** - Professional reports with risk summaries and detailed findings
@@ -26,12 +26,15 @@ python audit.py --files "policies.csv" --output policy_audit --verbose
 
 ## 📊 Security Categories
 
-- **Administrative Controls** - SSH, Telnet, timeouts, authentication
-- **SSL/TLS Security** - Certificate validation, encryption protocols
+- **Administrative Controls** - SSH, Telnet, timeouts, authentication, account security
+- **SSL/TLS Security** - Certificate validation, encryption protocols, weak hashes
 - **Network Security** - Firewall rules, VPN settings, SNMP configuration
-- **Access Control** - Password policies, login restrictions, banners
-- **Logging & Monitoring** - Traffic logging, audit settings
-- **System Hardening** - USB ports, services, protocols
+- **Access Control** - Password policies, login restrictions, banners, MFA
+- **Logging & Monitoring** - Traffic logging, audit settings, FortiLog
+- **System Hardening** - USB ports, services, protocols, firmware updates
+- **Wireless Security** - WEP/WPA settings, WPS, SSID broadcasting
+- **Content Security** - Layer 7 filtering, IPS/IDS, application control
+- **Operating System** - Version checks, update policies, security patches
 
 ## 📋 Output
 
